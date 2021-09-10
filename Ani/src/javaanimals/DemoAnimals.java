@@ -13,8 +13,7 @@ public class DemoAnimals {
     public static void main(String[] args) {
         String str; // строка результата
 
-        PropertyConfigurator.configure("E:\\bkn\\source\\java\\CloneGitHub\\JavaExamples\\java\\IDEA\\log4j.properties");
-
+        PropertyConfigurator.configure("log4j.properties");
         Logger log = LoggerFactory.getLogger(DemoAnimals.class);
         log.info("--Start program---");
 
