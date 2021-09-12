@@ -104,24 +104,12 @@ public class AnimalsCollection extends JavaAnimals implements ReadAndExecute{
      * @return - cnt количество животных, удовлетворяющих входному правилу
      */
     int calculate (String txtRules) {
-        int cnt=0;
-        ArrayList ArrayRules = doNormalization (txtRules);
-        for (cAnimal selectedAnimal : cAnimals) {                       // перебираем всех животных из коллекции
-            boolean isAttrExist=false;
-            for (Object arrayRule : ArrayRules) {                     // выбираем нормализованное "подправило" без скобок
-                String sRule = (String) arrayRule;
-                String[] aAttr = sRule.split(",");                   // получаем из "подправила" массив лексем, необходимых для выборки животных
-                for (String sAttr : aAttr) {
-                    isAttrExist = executeRule(sAttr, selectedAnimal);   // сравнение очередной лексемы с атрибутами животного
-                    if (!isAttrExist)
-                        break;                            // если лексемы нет среди атрибутов - прекращаем просмотр других лексем этого "подправила"
-                }
-                if (isAttrExist) {
-                    cnt++;
-                    break;                                              // совпали все лексемы хотя бы из одного подправила
-                }
-            }
-        }
+        ArrayList <String> ArrayRules = doNormalization(txtRules);
+        int cnt = (int)cAnimals.stream()                                                                    // перебираем всех животных из коллекции
+                .filter(selectedAnimal->
+                        ArrayRules.stream()                                                             // перебираем нормализованные "подправила" без скобок
+                                .anyMatch(arrayRule-> selectedAnimal.isRuleMatch((String)arrayRule)))   // проверяем "подправила"
+                .count();
         return cnt;
     }
     /**
