@@ -1,4 +1,8 @@
-package javaanimals;
+package ru.bknproj.animals.Strategy.StreamStrategy;
+
+
+import ru.bknproj.animals.Strategy.Animals;
+import ru.bknproj.animals.Strategy.ReadAnimals;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,7 +15,7 @@ import java.util.ArrayList;
  * @author Bkn
  * Реализует одну из стратегий подсчета количества животных - подсчет "на лету" из входного потока
  */
-public class AnimalsStream extends JavaAnimals implements ReadAndExecute {
+public class StreamStrategy extends Animals implements ReadAnimals {
     /**
      * Реализация интерфейса паттерна "Стратегия"
      * Просматривает файл с животными и сразу "на лету" ведет подсчет на основании файла с правилами
@@ -20,7 +24,7 @@ public class AnimalsStream extends JavaAnimals implements ReadAndExecute {
      * @return String - выходная строка результата
      */
     @Override
-    public String readAndExecute (String sFileAni, String sFileRules) {
+    public String ReadAnimals(String sFileAni, String sFileRules) {
         BufferedReader inputAnimals = null;
         BufferedReader inputRules = null;
         String sOut = "";

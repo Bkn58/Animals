@@ -1,8 +1,9 @@
-package javaanimals;
+package ru.bknproj.animals.Strategy.CollectionStrategy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import ru.bknproj.animals.Animal.Animal;
+import ru.bknproj.animals.Strategy.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,20 +11,19 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @author Bkn
  * Реализует одну из стратегий подсчета количества животных - подсчет животных из коллекции
  */
-public class AnimalsCollection extends JavaAnimals implements ReadAndExecute{
+public class CollectionStrategy extends Animals implements ReadAnimals {
 
-    ArrayList<cAnimal> cAnimals;           // динамический массив всех животных
+    public ArrayList<Animal> Animals;           // динамический массив всех животных
 
-    AnimalsCollection (){
-        cAnimals = new ArrayList <> ();
+    public CollectionStrategy(){
+        Animals = new ArrayList <> ();
     }
-    Logger log = LoggerFactory.getLogger(AnimalsCollection.class);
+    Logger log = LoggerFactory.getLogger(CollectionStrategy.class);
 
     /**
      * читает исходный файл с атрибутами животных и сохраняет его в коллекции cAnimals
@@ -53,12 +53,12 @@ public class AnimalsCollection extends JavaAnimals implements ReadAndExecute{
      * записываем атрибуты животного из aAttr в динамический массив
      * @param aAttr - массив с атрибутами животного
      */
-    void insertIntoCollection (String [] aAttr) {
+    public void insertIntoCollection (String [] aAttr) {
 
-        cAnimal curAni = new cAnimal();
-        curAni.propAni.addAll(Arrays.asList(aAttr));
+        Animal curAni = new Animal();
+        curAni.addAll(aAttr);
         // сохраняем экземпляр животного в коллекции всех животных
-        cAnimals.add(curAni);
+        Animals.add(curAni);
 
     }
 
@@ -78,10 +78,8 @@ public class AnimalsCollection extends JavaAnimals implements ReadAndExecute{
                 sOut = sOut + "\n\rRule: " + txtLine;
 
                 if (checker.isRuleValid(txtLine)) {
-
                     int cnt;
                     cnt = calculate(txtLine);              // подсчет животных с нужными атрибутами
-
                     sOut = sOut + " Count: " + cnt;
                 }
                 else
@@ -103,9 +101,9 @@ public class AnimalsCollection extends JavaAnimals implements ReadAndExecute{
      * лексемы внутри скобок - "подправило", скобки между собой являются дизъюнкцией
      * @return - cnt количество животных, удовлетворяющих входному правилу
      */
-    int calculate (String txtRules) {
+    public int calculate (String txtRules) {
         ArrayList <String> ArrayRules = doNormalization(txtRules);
-        int cnt = (int)cAnimals.stream()                                                                    // перебираем всех животных из коллекции
+        int cnt = (int) Animals.stream()                                                                    // перебираем всех животных из коллекции
                 .filter(selectedAnimal->
                         ArrayRules.stream()                                                             // перебираем нормализованные "подправила" без скобок
                                 .anyMatch(arrayRule-> selectedAnimal.isRuleMatch((String)arrayRule)))   // проверяем "подправила"
@@ -119,10 +117,10 @@ public class AnimalsCollection extends JavaAnimals implements ReadAndExecute{
      * @return tue - если лексема встречается в атрибутах животного,
      *         false - если лексема не встречается ни в одном атрибуте
      */
-    boolean executeRule (String sRule, cAnimal selectedAnimal) {
+    public boolean executeRule (String sRule, Animal selectedAnimal) {
         boolean isExist;
 
-        isExist = executeRule(sRule,selectedAnimal.propAni.toArray(new String [0]));
+       isExist = executeRule(sRule,selectedAnimal.toArray());
 
         return  isExist;
     }
@@ -134,7 +132,7 @@ public class AnimalsCollection extends JavaAnimals implements ReadAndExecute{
      * @return String - выходная строка результата
      */
     @Override
-    public String readAndExecute (String sFileAni, String sFileRules) {
+    public String ReadAnimals(String sFileAni, String sFileRules) {
         String sOut = "";
         File fIn = new File(sFileRules);
         try (BufferedReader inputVar = Files.newBufferedReader(fIn.toPath(), Charset.forName("Cp1251"))) {

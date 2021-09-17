@@ -1,16 +1,17 @@
-package javaanimals;
+package ru.bknproj.animals;
 
 import org.junit.Test;
+import ru.bknproj.animals.Strategy.Animals;
 
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-public class JavaAnimalsTest {
+public class AnimalsTest {
 
     @Test
     public void isRuleValid() {
-        JavaAnimals ex = new JavaAnimals();
+        Animals ex = new Animals();
         boolean actual = ex.isRuleValid("");
         boolean expected = false;
         assertEquals(expected,actual);
@@ -38,7 +39,7 @@ public class JavaAnimalsTest {
 
     @Test
     public void doNormalization() {
-        JavaAnimals ex = new JavaAnimals();
+        Animals ex = new Animals();
         ArrayList result;
 
         ArrayList actual = ex.doNormalization("(высокое,тяжелое)(^легкое)");
@@ -70,7 +71,7 @@ public class JavaAnimalsTest {
         boolean result;
         boolean expResult;
         String [] aAttr = {"курица", "травоядное", "маленькое", "легкое"};
-        JavaAnimals instance = new JavaAnimals();
+        Animals instance = new Animals();
 
         String sRule = "маленькое";
         expResult = true;

@@ -1,17 +1,18 @@
-package javaanimals;
+package ru.bknproj.animals.Animal;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
+ * Базовый класс одного животного
  *
  * @author Bkn
  */
-public class cAnimal {
+public class Animal {
      ArrayList <String> propAni;   // динамический массив свойств одного животного
     
-     cAnimal (){
+     public Animal(){
         propAni = new ArrayList <> (); 
      }
     /**
@@ -48,17 +49,29 @@ public class cAnimal {
     }
     /**
      * Поиск лексемы в атрибутах конкретного животного
-     * @param sLexem - текущая лексема текущего правила
+     * @param sLexeme - текущая лексема текущего правила
      * @return  tue - если лексема встречается в атрибутах животного,
      *          false - если лексема не встречается ни в одном атрибуте
      */
-    boolean isRuleMatch(String sLexem){
+    public boolean isRuleMatch(String sLexeme){
         boolean ret=false;
-        String sRule = (String) sLexem;
+        String sRule = sLexeme;
         String[] aAttr = sRule.split(",");                   // получаем из "подправила" массив лексем, необходимых для выборки животных
         if (Arrays.stream(aAttr).allMatch(sAttr -> this.isAttribMatch(sAttr)))
             return true;
         return  ret;
+    }
+    /**
+     * записывает атрибуты животного из aAttr в динамический массив propAni
+     * @param aAttr - массив с атрибутами животного
+     */
+
+    public void addAll (String [] aAttr) {
+        propAni.addAll(Arrays.asList(aAttr));
+    }
+
+    public String[] toArray() {
+        return propAni.toArray(new String [0]);
     }
 
 }

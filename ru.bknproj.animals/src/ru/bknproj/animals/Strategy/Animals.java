@@ -1,18 +1,20 @@
-package javaanimals;
+package ru.bknproj.animals.Strategy;
+
+import ru.bknproj.animals.RuleCheker.Validator;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 /**
  * Базовый Класс для классов конкретных Стратегий
+ *
  * @author Bkn
  */
-public class JavaAnimals {
+public class Animals {
     
-    Validator checker = new Validator();    // автомат проверки синтаксиса строк правила
+    public Validator checker = new Validator();    // автомат проверки синтаксиса строк правила
 
-    JavaAnimals (){    }
+    //Animals(){    }
 
     /**
      * Проверяет строку на корректный синтаксис
@@ -21,7 +23,7 @@ public class JavaAnimals {
      */
     public boolean isRuleValid(String strRule) {
 
-        return checker.isRuleValid(strRule);
+        return this.checker.isRuleValid(strRule);
         
     }
 
@@ -33,7 +35,7 @@ public class JavaAnimals {
      * @return outSubRules - массив выходных строк "подправил"
      */
     
-    ArrayList doNormalization (String inRule) {
+    public ArrayList doNormalization (String inRule) {
         ArrayList outSubRules = new ArrayList();
         
                 String strPattern = "[(].+?[)]";
@@ -63,7 +65,7 @@ public class JavaAnimals {
      * @return  tue - если лексема встречается в атрибутах животного,
      *          false - если лексема не встречается ни в одном атрибуте
      */
-    boolean executeRule (String sLexem, String[] selectedAnimal) {
+    public boolean executeRule (String sLexem, String[] selectedAnimal) {
         boolean isExist=false;
         String str = sLexem.trim();
         // перебираем все атрибуты животного и сравниваем ее с текущей лексемой
@@ -90,17 +92,5 @@ public class JavaAnimals {
    /**
      * выводит всю коллекцию на экран
      */
-   void displayAll (ArrayList <cAnimal> cAni) {
-        for (int i =0;i<cAni.size();i++) {
-           cAnimal sAni = cAni.get(i);
-           display(sAni);
-        }
-   }
-   void display (cAnimal cAni) {
-       for (int j=0;j<cAni.propAni.size();j++){
-               System.out.print(cAni.propAni.get(j)+" ");
-       }
-       System.out.println();
-    }
-
 }
+

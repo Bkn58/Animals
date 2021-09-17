@@ -1,4 +1,4 @@
-package javaanimals;
+package ru.bknproj.animals.RuleCheker;
 
 /**
  *

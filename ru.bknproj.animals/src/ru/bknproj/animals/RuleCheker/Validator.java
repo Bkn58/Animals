@@ -1,9 +1,9 @@
-package javaanimals;
+package ru.bknproj.animals.RuleCheker;
 
 import java.util.ArrayList;
-
 /**
  * Автомат проверки синтаксиса строки правила
+ *
  * @author Bkn
  */
 
@@ -28,11 +28,11 @@ public class Validator {
 
     }
     
-    int getErrorPosition (){
+    public int getErrorPosition (){
         return curErrorPosition;
     }
     
-    String getErrorMessage (){
+    public String getErrorMessage (){
         return errorMsg;
     }
     /**
@@ -64,7 +64,7 @@ public class Validator {
      * @param strRule - исходная строка с правилом
      * @return true - если синтаксис верный
      */
-    boolean isRuleValid (String strRule) {
+    public boolean isRuleValid (String strRule) {
         boolean isValid=false;
         char [] chArray = strRule.toCharArray();
         curErrorPosition=0;

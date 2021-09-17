@@ -1,8 +1,11 @@
-package javaanimals;
+package ru.bknproj.animals;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.bknproj.animals.Strategy.CollectionStrategy.CollectionStrategy;
+import ru.bknproj.animals.Strategy.ContextCalc;
+import ru.bknproj.animals.Strategy.StreamStrategy.StreamStrategy;
 
 public class DemoAnimals {
     /**
@@ -23,13 +26,13 @@ public class DemoAnimals {
         else {
             /* подсчет через коллекцию животных используя интерфейс из класса*/
             log.info("counting through a collection of animals using the interface from the class");
-            AnimalsCollection cAnimalColl = new AnimalsCollection ();
-            str = cAnimalColl.readAndExecute(args[0],args[1]);
+            CollectionStrategy cAnimalColl = new CollectionStrategy();
+            str = cAnimalColl.ReadAnimals(args[0],args[1]);
             log.info(str);
             /* подсчет напрямую в потоке чтения  используя интерфейс из класса*/
             log.info("counting directly in the read stream using the interface from the class");
-            AnimalsStream  cAmimallstr = new AnimalsStream();
-            str = cAmimallstr.readAndExecute(args[0],args[1]);
+            StreamStrategy cAmimalstr = new StreamStrategy();
+            str = cAmimalstr.ReadAnimals(args[0],args[1]);
             log.info(str);
 
             /* то же, но с использованием паттерна "стратегия" */
@@ -37,13 +40,13 @@ public class DemoAnimals {
 
             /* стратегия подсчета через коллекцию животных с использованием паттерна "Стратегия"*/
             log.info("counting through a collection of animals using the\"Strategy\" pattern");
-            context.setStrategy(new AnimalsCollection());
+            context.setStrategy(new CollectionStrategy());
             str = context.executeStrategy(args[0],args[1]);
             log.info(str);
 
             /* стратегия подсчета напрямую в потоке чтения с использованием паттерна "Стратегия"*/
             log.info("counting directly in the read stream using the \"Strategy\" pattern");
-            context.setStrategy(new AnimalsStream ());
+            context.setStrategy(new StreamStrategy());
             str = context.executeStrategy(args[0],args[1]);
             log.info(str);
             log.info("--End program---");
