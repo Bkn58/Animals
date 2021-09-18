@@ -1,4 +1,4 @@
-package ru.bknproj.animals.Strategy;
+package ru.bknproj.animals.strategy;
 
 /**
  * Общий интерфейс для всех стратегий паттерна "Стратегия"

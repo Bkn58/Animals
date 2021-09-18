@@ -1,7 +1,7 @@
 package ru.bknproj.animals;
 
 import org.junit.Test;
-import ru.bknproj.animals.Strategy.Animals;
+import ru.bknproj.animals.strategy.Animals;
 
 import java.util.ArrayList;
 

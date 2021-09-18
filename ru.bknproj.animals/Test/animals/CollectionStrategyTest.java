@@ -1,7 +1,7 @@
 package ru.bknproj.animals;
 
 import org.junit.Test;
-import ru.bknproj.animals.Strategy.CollectionStrategy.CollectionStrategy;
+import ru.bknproj.animals.strategy.collectionstrategy.CollectionStrategy;
 
 import static org.junit.Assert.assertEquals;
 
@@ -80,34 +80,34 @@ public class CollectionStrategyTest {
         String sRule = "маленькое";
         instance.insertIntoCollection(aAttr);
         expResult = true;
-        result = instance.executeRule(sRule, instance.Animals.get(0));
+        result = instance.executeRule(sRule, instance.arrAnimals.get(0));
         assertEquals(expResult, result);
 
         result = instance.executeRule(sRule, aAttr);
         assertEquals(expResult, result);
 
-        instance.Animals.clear();
+        instance.arrAnimals.clear();
         sRule = "плотоядное";
         instance.insertIntoCollection(aAttr);
         expResult = false;
-        result = instance.executeRule(sRule, instance.Animals.get(0));
+        result = instance.executeRule(sRule, instance.arrAnimals.get(0));
         assertEquals(expResult, result);
 
         result = instance.executeRule(sRule, aAttr);
         assertEquals(expResult, result);
 
-        instance.Animals.clear();
+        instance.arrAnimals.clear();
         sRule = "травоядное|плотоядное";
         instance.insertIntoCollection(aAttr);
         expResult = true;
-        result = instance.executeRule(sRule, instance.Animals.get(0));
+        result = instance.executeRule(sRule, instance.arrAnimals.get(0));
         assertEquals(expResult, result);
 
         result = instance.executeRule(sRule, aAttr);
         assertEquals(expResult, result);
 
 
-        instance.Animals.clear();
+        instance.arrAnimals.clear();
         sRule = "^невысокое";
         instance.insertIntoCollection(aAttr);
         //instance.displayAll(instance.Animals);
@@ -115,7 +115,7 @@ public class CollectionStrategyTest {
         result = instance.executeRule(sRule, aAttr);
         assertEquals(expResult, result);
 
-        result = instance.executeRule(sRule, instance.Animals.get(0));
+        result = instance.executeRule(sRule, instance.arrAnimals.get(0));
         assertEquals(expResult, result);
     }
 

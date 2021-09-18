@@ -1,4 +1,4 @@
-package ru.bknproj.animals.Animal;
+package ru.bknproj.animals.animal;
 
 import java.util.ArrayList;
 import java.util.Arrays;

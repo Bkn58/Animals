@@ -1,8 +1,8 @@
-package ru.bknproj.animals.Strategy.StreamStrategy;
+package ru.bknproj.animals.strategy.streamstrategy;
 
 
-import ru.bknproj.animals.Strategy.Animals;
-import ru.bknproj.animals.Strategy.ReadAnimals;
+import ru.bknproj.animals.strategy.Animals;
+import ru.bknproj.animals.strategy.ReadAnimals;
 
 import java.io.BufferedReader;
 import java.io.File;

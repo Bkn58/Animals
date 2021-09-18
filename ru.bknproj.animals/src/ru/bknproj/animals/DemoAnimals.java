@@ -3,9 +3,9 @@ package ru.bknproj.animals;
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bknproj.animals.Strategy.CollectionStrategy.CollectionStrategy;
-import ru.bknproj.animals.Strategy.ContextCalc;
-import ru.bknproj.animals.Strategy.StreamStrategy.StreamStrategy;
+import ru.bknproj.animals.strategy.collectionstrategy.CollectionStrategy;
+import ru.bknproj.animals.strategy.ContextCalc;
+import ru.bknproj.animals.strategy.streamstrategy.StreamStrategy;
 
 public class DemoAnimals {
     /**

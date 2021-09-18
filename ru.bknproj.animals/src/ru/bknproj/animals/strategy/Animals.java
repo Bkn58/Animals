@@ -1,6 +1,6 @@
-package ru.bknproj.animals.Strategy;
+package ru.bknproj.animals.strategy;
 
-import ru.bknproj.animals.RuleCheker.Validator;
+import ru.bknproj.animals.rulecheker.Validator;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
