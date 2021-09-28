@@ -80,34 +80,34 @@ public class CollectionStrategyTest {
         String sRule = "маленькое";
         instance.insertIntoCollection(aAttr);
         expResult = true;
-        result = instance.executeRule(sRule, instance.arrAnimals.get(0));
+        result = instance.executeRule(sRule, instance.getAnimal (0));
         assertEquals(expResult, result);
 
         result = instance.executeRule(sRule, aAttr);
         assertEquals(expResult, result);
 
-        instance.arrAnimals.clear();
+        instance.clearAnimals ();// arrAnimals.clear();
         sRule = "плотоядное";
         instance.insertIntoCollection(aAttr);
         expResult = false;
-        result = instance.executeRule(sRule, instance.arrAnimals.get(0));
+        result = instance.executeRule(sRule, instance.getAnimal (0));
         assertEquals(expResult, result);
 
         result = instance.executeRule(sRule, aAttr);
         assertEquals(expResult, result);
 
-        instance.arrAnimals.clear();
+        instance.clearAnimals (); //arrAnimals.clear();
         sRule = "травоядное|плотоядное";
         instance.insertIntoCollection(aAttr);
         expResult = true;
-        result = instance.executeRule(sRule, instance.arrAnimals.get(0));
+        result = instance.executeRule(sRule, instance.getAnimal (0));
         assertEquals(expResult, result);
 
         result = instance.executeRule(sRule, aAttr);
         assertEquals(expResult, result);
 
 
-        instance.arrAnimals.clear();
+        instance.clearAnimals (); //arrAnimals.clear();
         sRule = "^невысокое";
         instance.insertIntoCollection(aAttr);
         //instance.displayAll(instance.Animals);
@@ -115,7 +115,7 @@ public class CollectionStrategyTest {
         result = instance.executeRule(sRule, aAttr);
         assertEquals(expResult, result);
 
-        result = instance.executeRule(sRule, instance.arrAnimals.get(0));
+        result = instance.executeRule(sRule, instance.getAnimal (0));
         assertEquals(expResult, result);
     }
 

@@ -1,15 +1,10 @@
-/**
- * Реализует одну из стратегий подсчета количества животных - подсчет животных из коллекции.
- *
- * @author Bkn
- */
 package ru.bknproj.animals.strategy.collectionstrategy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.bknproj.animals.animal.Animal;
 import ru.bknproj.animals.strategy.Animals;
-import ru.bknproj.animals.strategy.ReadAnimals;
+import ru.bknproj.animals.strategy.CountingAnimals;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,12 +13,21 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
+/**
+ *  Реализация стратегии подсчета количества животных из коллекции.
+ *
+ * @author Bkn
+ */
 
-public class CollectionStrategy extends Animals implements ReadAnimals {
+public class CollectionStrategy extends Animals implements CountingAnimals {
+    private static final String CP1251 = "Cp1251";
+    private static final String COUNT = " Count: ";
+    private static final String COLON = ",";
+    private static final String RULE = "\n\rRule: ";
     /**
-     * динамический массив всех животных.
+     * Динамический массив всех животных.
      */
-    public ArrayList<Animal> arrAnimals;
+    ArrayList<Animal> arrAnimals;
 
     public CollectionStrategy() {
         arrAnimals = new ArrayList<>();
@@ -32,30 +36,48 @@ public class CollectionStrategy extends Animals implements ReadAnimals {
     private Logger log = LoggerFactory.getLogger(CollectionStrategy.class);
 
     /**
-     * читает исходный файл с атрибутами животных и сохраняет его в коллекции cAnimals.
-     * @param strFile - исходный файл
+    * Возвращает i-тый элемент коллекции.
+     *
+    * @param  i - номер элемента коллекции
+    */
+    public Animal getAnimal (int i) {
+        return arrAnimals.get (i);
+    }
+
+    /**
+     * Очищает коллекцию животных.
      */
-    void readAllAnimals (final String strFile) {
+    public void clearAnimals () {
+        arrAnimals.clear();
+    }
+
+    /**
+     * Читает файл с атрибутами животных во внутреннее представление.
+     *
+     * @param fileName - файл с описанием атрибутов животных.
+     * @throws IOException
+     */
+    public void readAllAnimals (final String fileName) throws IOException {
         String txtLine;
 
-        log.info("Read file: {}", strFile);
-        File fileIn = new File(strFile);
-        try (BufferedReader inputVar = Files.newBufferedReader(fileIn.toPath(), Charset.forName("Cp1251"))) {
+        log.debug ("Read file: {}", fileName);
+        File fileIn = new File(fileName);
+        try (BufferedReader inputVar = Files.newBufferedReader(fileIn.toPath(), Charset.forName(CP1251))) {
             txtLine = inputVar.readLine();
             while (txtLine != null) {
-                String[] aAttr = txtLine.split(","); // получаем массив атрибутов одного животного
-                insertIntoCollection(aAttr);         // записываем атрибуты животного в динамический массив
+                insertIntoCollection(txtLine.split(COLON));         // записываем атрибуты животного в динамический массив
                 txtLine = inputVar.readLine();
-                log.info(txtLine);
+                log.debug(txtLine);
             }
         } catch (FileNotFoundException ex) {
-            log.error("File: {} not found", strFile);
+            log.error("File: {} not found", fileName);
         } catch (IOException ex) {
             log.error("IOException ", ex);
         }
     }
     /**
-     * записываем атрибуты животного из aAttr в динамический массив.
+     * Записывает атрибуты животного из aAttr в динамический массив.
+     *
      * @param aAttr - массив с атрибутами животного
      */
     public void insertIntoCollection (final String[] aAttr) {
@@ -68,38 +90,45 @@ public class CollectionStrategy extends Animals implements ReadAnimals {
     }
 
     /**
-     * читает файл с правилами и выполняет их по одному (одна строка - одно правило)
+     * Выполняет правила из файла по одному (одна строка - одно правило)
      * атрибуты с функцией "и" разделяются запятой
-     * несколько атрибутов могут объединяться функцией "или" (|}
-     * для отрицания атрибута используется символ "^".
-     * @param inputVar - имя файла
+     * несколько атрибутов могут объединяться функцией "или" - символ "|"
+     * для отрицания атрибута используется символ "^"
+     * если в строке правила синтаксическая ошибка, то обработка этого правила прерывается
+     * и в log выводится диагностическое сообщение об ошибке со статусом ERROR.
+     *
+     * @param fileName - имя файла
      * @return String - строка результата подсчета
+     * @throws IOException
      */
-    public String readRules (final BufferedReader inputVar) {
+    public String readRules (final BufferedReader fileName) throws IOException {
         String txtLine;
-        String sOut = "";
+        StringBuilder  sOut = new StringBuilder ();
         try {
-            txtLine = inputVar.readLine();             // читаем очередную строку с правилом
+            txtLine = fileName.readLine();             // читаем очередную строку с правилом
             while (txtLine != null) {
-                sOut = sOut + "\n\rRule: " + txtLine;
+                sOut.append (RULE).append (txtLine);
 
                 if (checker.isRuleValid(txtLine)) {
                     int cnt;
                     cnt = calculate(txtLine);              // подсчет животных с нужными атрибутами
-                    sOut = sOut + " Count: " + cnt;
+                    log.debug (txtLine+" COUNT={}",cnt);
+                    sOut.append (COUNT).append (cnt);
                 } else {
-                    log.info ("Syntax ERROR of the rule:'{}' in the position: {} {}", txtLine, checker.getErrorPosition (), checker.getErrorMessage ());
+                    log.error ("Syntax ERROR of the rule:'{}' in the position: {} {}", txtLine, checker.getErrorPosition (), checker.getErrorMessage ());
                 }
-                txtLine = inputVar.readLine();          // читаем очередную строку с правилом
+                txtLine = fileName.readLine();          // читаем очередную строку с правилом
             }
         }
         catch (IOException ex) {
             log.error("IOException ", ex);
         }
-        return sOut;
+        return sOut.toString ();
     }
+
     /**
-     * подсчитывает количество животных в коллекции, удовлетворяющих правилу из aAttr
+     * Подсчитывает количество животных в коллекции, удовлетворяющих правилу из aAttr.
+     *
      * @param txtRules - нормализованное правило, состоящее из лексем вида:
      * (лексема1,лексема2,лексема3|лексема4)|(лексема5,^лексема6).....
      * лексемы, перечисленные через запятую внутри скобок, являются конъюнкцией
@@ -110,14 +139,15 @@ public class CollectionStrategy extends Animals implements ReadAnimals {
     public int calculate (final String txtRules) {
         ArrayList <String> arrRules = doNormalization(txtRules);
         int cnt = (int) arrAnimals.stream()                                                                    // перебираем всех животных из коллекции
-                .filter(selectedAnimal ->
-                        arrRules.stream()                                                             // перебираем нормализованные "подправила" без скобок
-                                .anyMatch(arrayRule -> selectedAnimal.isRuleMatch((String) arrayRule)))   // проверяем "подправила"
+                .filter(selectedAnimal -> arrRules.stream()                                                             // перебираем нормализованные "подправила" без скобок
+                .anyMatch(arrayRule -> selectedAnimal.isRuleMatch((String) arrayRule)))   // проверяем "подправила"
                 .count();
         return cnt;
     }
+
     /**
      * Поиск лексемы в атрибутах конкретного животного.
+     *
      * @param sRule - текущая лексема текущего правила
      * @param selectedAnimal - элемент коллекции (животное)
      * @return tue - если лексема встречается в атрибутах животного,
@@ -132,24 +162,26 @@ public class CollectionStrategy extends Animals implements ReadAnimals {
     }
 
     /**
-     * Реализация интерфейса паттерна "Стратегия".
-     * @param sFileAni - имя файла с атрибутами животных
-     * @param sFileRules - имя файла с правилами
+     * Реализация интерфейса CountingAnimals паттерна "Стратегия".
+     *
+     * @param animalsFileName - имя файла с атрибутами животных
+     * @param rulesFileName - имя файла с правилами
      * @return String - выходная строка результата
+     * @throws IOException
      */
     @Override
-    public String ReadAnimals(final String sFileAni, final String sFileRules) {
+    public String countingAnimals (final String animalsFileName, final String rulesFileName) throws IOException {
         String sOut = "";
-        File fIn = new File(sFileRules);
-        try (BufferedReader inputVar = Files.newBufferedReader(fIn.toPath(), Charset.forName("Cp1251"))) {
+        File fIn = new File(rulesFileName);
+        try (BufferedReader inputVar = Files.newBufferedReader(fIn.toPath(), Charset.forName(CP1251))) {
             try {
-                readAllAnimals(sFileAni);
+                readAllAnimals(animalsFileName);
                 sOut = readRules(inputVar);
             } finally {
                 inputVar.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("IOException ", e);
         }
         return sOut;
     }

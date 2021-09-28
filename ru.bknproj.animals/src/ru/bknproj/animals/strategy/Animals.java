@@ -11,13 +11,13 @@ import java.util.regex.Pattern;
  * @author Bkn
  */
 public class Animals {
-    
-    public Validator checker = new Validator();    // автомат проверки синтаксиса строк правила
 
-    //Animals(){    }
+    public static final String PARENTHESIS = "[(].+?[)]"; //шаблон regx поиска парных скобок
+    public Validator checker = new Validator();           // автомат проверки синтаксиса строк правила
 
     /**
-     * Проверяет строку на корректный синтаксис
+     * Проверяет строку на корректный синтаксис.
+     *
      * @param strRule - исходная строка с правилом
      * @return true - если синтаксис верный
      */
@@ -28,9 +28,10 @@ public class Animals {
     }
 
     /**
-     * Нормализует входную строку.
+     * Нормализует входную строку
      * ищет парные скобки и представляет результирующую последовательность
      * в виде массива строк "подправил" без скобок.
+     *
      * @param inRule - входная строка
      * @return outSubRules - массив выходных строк "подправил"
      */
@@ -38,11 +39,10 @@ public class Animals {
     public ArrayList doNormalization (String inRule) {
         ArrayList outSubRules = new ArrayList();
         
-                String strPattern = "[(].+?[)]";
-                boolean hasBrackets = inRule.matches(strPattern);
+                boolean hasBrackets = inRule.matches(PARENTHESIS);
                 if (hasBrackets){
                     // ищем парные скобки
-                    Pattern patBrackets = Pattern.compile(strPattern); 
+                    Pattern patBrackets = Pattern.compile(PARENTHESIS);
                     Matcher matBrackets = patBrackets.matcher(inRule);
                     while (matBrackets.find()) {
                         int start = matBrackets.start()+1;
@@ -59,7 +59,8 @@ public class Animals {
         return outSubRules;
     }
     /**
-     * Поиск лексемы в атрибутах конкретного животного
+     * Поиск лексемы в атрибутах конкретного животного.
+     *
      * @param sLexem - текущая лексема текущего правила
      * @param selectedAnimal - массив с атрибутами животного
      * @return  tue - если лексема встречается в атрибутах животного,
@@ -88,9 +89,5 @@ public class Animals {
             }
             return isExist;
     }
-
-   /**
-     * выводит всю коллекцию на экран
-     */
 }
 
