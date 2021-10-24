@@ -3,7 +3,7 @@ package ru.bknproj.animals.strategy.collectionstrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.bknproj.animals.animal.Animal;
-import ru.bknproj.animals.strategy.Animals;
+import ru.bknproj.animals.strategy.BaseStrategy;
 import ru.bknproj.animals.strategy.CountingAnimals;
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * @author Bkn
  */
 
-public class CollectionStrategy extends Animals implements CountingAnimals {
+public class CollectionStrategy extends BaseStrategy implements CountingAnimals {
     private static final String CP1251 = "Cp1251";
     private static final String COUNT = " Count: ";
     private static final String COLON = ",";
@@ -153,14 +153,15 @@ public class CollectionStrategy extends Animals implements CountingAnimals {
      * @return tue - если лексема встречается в атрибутах животного,
      *         false - если лексема не встречается ни в одном атрибуте
      */
+/*
     public boolean executeRule (final String sRule, final Animal selectedAnimal) {
         boolean isExist;
 
-       isExist = executeRule(sRule, selectedAnimal.toArray());
+       isExist = super.executeRule(sRule, selectedAnimal.toArray());
 
         return  isExist;
     }
-
+*/
     /**
      * Реализация интерфейса CountingAnimals паттерна "Стратегия".
      *
@@ -172,8 +173,8 @@ public class CollectionStrategy extends Animals implements CountingAnimals {
     @Override
     public String countingAnimals (final String animalsFileName, final String rulesFileName) throws IOException {
         String sOut = "";
-        File fIn = new File(rulesFileName);
-        try (BufferedReader inputVar = Files.newBufferedReader(fIn.toPath(), Charset.forName(CP1251))) {
+        File rulesFILE = new File(rulesFileName);
+        try (BufferedReader inputVar = Files.newBufferedReader(rulesFILE.toPath(), Charset.forName(CP1251))) {
             try {
                 readAllAnimals(animalsFileName);
                 sOut = readRules(inputVar);

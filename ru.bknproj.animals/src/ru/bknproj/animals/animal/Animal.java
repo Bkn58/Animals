@@ -29,7 +29,7 @@ public class Animal {
      */
     boolean isAttribMatch (String sAttrib){
         AtomicBoolean isExist= new AtomicBoolean(false);
-        // перебираем все атрибуты животного и сравниваем ее с текущей лексемой
+        // перебираем все атрибуты животного и сравниваем их с лексемой правила
         String[] aSubLexeme = sAttrib.split("\\|");  //если в лексеме есть дизъюнкция sub-лексем (символ "|")
         Arrays.stream(aSubLexeme).forEach(str -> {
             str = str.trim();

@@ -3,11 +3,13 @@ package ru.bknproj.animals;
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.bknproj.animals.strategy.ContextStrategy;
 import ru.bknproj.animals.strategy.collectionstrategy.CollectionStrategy;
-import ru.bknproj.animals.strategy.ContextCalc;
+import ru.bknproj.animals.strategy.dbstrategy.DBStrategy;
 import ru.bknproj.animals.strategy.streamstrategy.StreamStrategy;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class DemoAnimals {
     /**
@@ -39,8 +41,20 @@ public class DemoAnimals {
                 str = cAmimalstr.countingAnimals (args[0],args[1]);
                 log.info(str);
 
+
+                /* подсчет из базы данных используя интерфейс из класса*/
+                log.info("counting from a database using an interface from a class");
+                DBStrategy cAmimalDB = null;
+                try {
+                    cAmimalDB = new DBStrategy ();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace ();
+                }
+                str = cAmimalDB.countingAnimals (args[0],args[1]);
+                log.info(str);
+
                 /* то же, но с использованием паттерна "стратегия" */
-                ContextCalc context = new ContextCalc();
+                ContextStrategy context = new ContextStrategy ();
 
                 /* стратегия подсчета через коллекцию животных с использованием паттерна "Стратегия"*/
                 log.info("counting through a collection of animals using the\"Strategy\" pattern");
@@ -53,6 +67,18 @@ public class DemoAnimals {
                 context.setStrategy(new StreamStrategy());
                 str = context.executeStrategy(args[0],args[1]);
                 log.info(str);
+
+                /*стратегия подсчета через базу данных животных с использованием паттерна "Стратегия"*/
+                log.info("counting from a database using the \"Strategy\" pattern");
+                try {
+                    context.setStrategy(new DBStrategy());
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace ();
+                }
+                str = context.executeStrategy(args[0],args[1]);
+                log.info(str);
+
+
                 log.info("--End program---");
             } catch (IOException e) {
                 e.printStackTrace ();

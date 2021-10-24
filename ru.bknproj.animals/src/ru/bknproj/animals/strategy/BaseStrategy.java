@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  *
  * @author Bkn
  */
-public class Animals {
+public class BaseStrategy {
 
     public static final String PARENTHESIS = "[(].+?[)]"; //шаблон regx поиска парных скобок
     public Validator checker = new Validator();           // автомат проверки синтаксиса строк правила
@@ -66,7 +66,7 @@ public class Animals {
      * @return  tue - если лексема встречается в атрибутах животного,
      *          false - если лексема не встречается ни в одном атрибуте
      */
-    public boolean executeRule (String sLexem, String[] selectedAnimal) {
+    public boolean compareRule (String sLexem, String[] selectedAnimal) {
         boolean isExist=false;
         String str = sLexem.trim();
         // перебираем все атрибуты животного и сравниваем ее с текущей лексемой

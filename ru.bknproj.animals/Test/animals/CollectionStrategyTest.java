@@ -80,30 +80,33 @@ public class CollectionStrategyTest {
         String sRule = "маленькое";
         instance.insertIntoCollection(aAttr);
         expResult = true;
-        result = instance.executeRule(sRule, instance.getAnimal (0));
+       // result = instance.executeRule(sRule, instance.getAnimal (0));
+        result = instance.getAnimal (0).isRuleMatch (sRule);
         assertEquals(expResult, result);
 
-        result = instance.executeRule(sRule, aAttr);
+        result = instance.compareRule (sRule, aAttr);
         assertEquals(expResult, result);
 
         instance.clearAnimals ();// arrAnimals.clear();
         sRule = "плотоядное";
         instance.insertIntoCollection(aAttr);
         expResult = false;
-        result = instance.executeRule(sRule, instance.getAnimal (0));
+        //result = instance.executeRule(sRule, instance.getAnimal (0));
+        result = instance.getAnimal (0).isRuleMatch (sRule);
         assertEquals(expResult, result);
 
-        result = instance.executeRule(sRule, aAttr);
+        result = instance.compareRule (sRule, aAttr);
         assertEquals(expResult, result);
 
         instance.clearAnimals (); //arrAnimals.clear();
         sRule = "травоядное|плотоядное";
         instance.insertIntoCollection(aAttr);
         expResult = true;
-        result = instance.executeRule(sRule, instance.getAnimal (0));
+        //result = instance.executeRule(sRule, instance.getAnimal (0));
+        result = instance.getAnimal (0).isRuleMatch (sRule);
         assertEquals(expResult, result);
 
-        result = instance.executeRule(sRule, aAttr);
+        result = instance.compareRule (sRule, aAttr);
         assertEquals(expResult, result);
 
 
@@ -112,10 +115,11 @@ public class CollectionStrategyTest {
         instance.insertIntoCollection(aAttr);
         //instance.displayAll(instance.Animals);
         expResult = true;
-        result = instance.executeRule(sRule, aAttr);
+        result = instance.compareRule (sRule, aAttr);
         assertEquals(expResult, result);
 
-        result = instance.executeRule(sRule, instance.getAnimal (0));
+        //result = instance.executeRule(sRule, instance.getAnimal (0));
+        result = instance.getAnimal (0).isRuleMatch (sRule);
         assertEquals(expResult, result);
     }
 

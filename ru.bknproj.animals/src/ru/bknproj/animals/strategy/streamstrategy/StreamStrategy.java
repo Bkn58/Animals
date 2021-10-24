@@ -2,7 +2,7 @@ package ru.bknproj.animals.strategy.streamstrategy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bknproj.animals.strategy.Animals;
+import ru.bknproj.animals.strategy.BaseStrategy;
 import ru.bknproj.animals.strategy.CountingAnimals;
 
 import java.io.BufferedReader;
@@ -11,12 +11,13 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
+
 /**
  * Реализация стратегии подсчета количества животных напрямую из входного потока
  *
  *  @author Bkn
  */
-public class StreamStrategy extends Animals implements CountingAnimals {
+public class StreamStrategy extends BaseStrategy implements CountingAnimals {
     private static final String CP1251 = "Cp1251";
     private static final String RULE = "\n\rRule: ";
     private static final String COUNT = " count: ";
@@ -25,7 +26,8 @@ public class StreamStrategy extends Animals implements CountingAnimals {
 
     /**
      * Реализация интерфейса паттерна "Стратегия"
-     * ведет подсчет животных из входного потока на основании файла с правилами
+     * ведет подсчет животных из входного потока на основании файла с правилами.
+     *
      * @param fileNameAni - файл входного потока с животными
      * @param fileNameRules - файл с правилами
      * @return String - выходная строка результата
@@ -46,9 +48,9 @@ public class StreamStrategy extends Animals implements CountingAnimals {
 
             File fInAnmals = new File(fileNameAni);
             inputAnimals = Files.newBufferedReader(fInAnmals.toPath(), Charset.forName(CP1251));
-            while(txtLineRule != null){
+            while(txtLineRule != null) {
                 if (checker.isRuleValid(txtLineRule)) {
-                    ArrayList ArrayRules = doNormalization (txtLineRule);
+                    ArrayList <String> ArrayRules = doNormalization (txtLineRule);
 
                     txtLineAni = inputAnimals.readLine();
                     int cnt = 0;
@@ -56,10 +58,11 @@ public class StreamStrategy extends Animals implements CountingAnimals {
                         boolean isExist = false;
                         for (int i=0;i<ArrayRules.size();i++) {                 // выбираем нормализованное "подправило" без скобок
                             String sRule = (String)ArrayRules.get(i);
-                            String[] sAttrRule = sRule.split(",");           // получаем массив атрибутов "подправила", необходимых для выборки животных;
+                            String[] sAttrRule = sRule.split(",");           // получаем массив лексем (подмножества атрибутов, разделенных запятыми), необходимых для выборки животных;
                             String[] sAttrAni = txtLineAni.split(",");       // получаем массив атрибутов животных
+
                             for (String strLexema : sAttrRule) {                // перебираем все лексемы "подправила"
-                                isExist = executeRule(strLexema, sAttrAni);
+                                isExist = compareRule (strLexema, sAttrAni);
                                 if (!isExist)
                                     break;                                      // лексема не встретилась в атрибутах животного - прерываем цикл просмотра лексем
                             }
