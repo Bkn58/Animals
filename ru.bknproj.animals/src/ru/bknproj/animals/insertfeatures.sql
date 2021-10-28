@@ -1,0 +1,8 @@
+Insert into Features (Features_ID,Features_Name) Values (	1	,'тяжелое,высокое,травоядное')
+Insert into Features (Features_ID,Features_Name) Values (	2	,'среднее,маленькое,плотоядное')
+Insert into Features (Features_ID,Features_Name) Values (	3	,'легкое,маленькое,всеядное')
+Insert into Features (Features_ID,Features_Name) Values (	5	,'среднее,невысокое,травоядное')
+Insert into Features (Features_ID,Features_Name) Values (	6	,'легкое,маленькое,травоядное')
+Insert into Features (Features_ID,Features_Name) Values (	7	,'среднее,невысокое,плотоядное')
+Insert into Features (Features_ID,Features_Name) Values (	8	,'тяжелое,невысокое,всеядное')
+Insert into Features (Features_ID,Features_Name) Values (	9	,'тяжелое,невысокое,травоядное')

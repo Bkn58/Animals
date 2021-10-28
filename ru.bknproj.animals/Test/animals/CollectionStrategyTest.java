@@ -1,7 +1,7 @@
 package ru.bknproj.animals;
 
 import org.junit.Test;
-import ru.bknproj.animals.Strategy.CollectionStrategy.CollectionStrategy;
+import ru.bknproj.animals.strategy.collectionstrategy.CollectionStrategy;
 
 import static org.junit.Assert.assertEquals;
 
@@ -80,42 +80,46 @@ public class CollectionStrategyTest {
         String sRule = "маленькое";
         instance.insertIntoCollection(aAttr);
         expResult = true;
-        result = instance.executeRule(sRule, instance.Animals.get(0));
+       // result = instance.executeRule(sRule, instance.getAnimal (0));
+        result = instance.getAnimal (0).isRuleMatch (sRule);
         assertEquals(expResult, result);
 
-        result = instance.executeRule(sRule, aAttr);
+        result = instance.compareRule (sRule, aAttr);
         assertEquals(expResult, result);
 
-        instance.Animals.clear();
+        instance.clearAnimals ();// arrAnimals.clear();
         sRule = "плотоядное";
         instance.insertIntoCollection(aAttr);
         expResult = false;
-        result = instance.executeRule(sRule, instance.Animals.get(0));
+        //result = instance.executeRule(sRule, instance.getAnimal (0));
+        result = instance.getAnimal (0).isRuleMatch (sRule);
         assertEquals(expResult, result);
 
-        result = instance.executeRule(sRule, aAttr);
+        result = instance.compareRule (sRule, aAttr);
         assertEquals(expResult, result);
 
-        instance.Animals.clear();
+        instance.clearAnimals (); //arrAnimals.clear();
         sRule = "травоядное|плотоядное";
         instance.insertIntoCollection(aAttr);
         expResult = true;
-        result = instance.executeRule(sRule, instance.Animals.get(0));
+        //result = instance.executeRule(sRule, instance.getAnimal (0));
+        result = instance.getAnimal (0).isRuleMatch (sRule);
         assertEquals(expResult, result);
 
-        result = instance.executeRule(sRule, aAttr);
+        result = instance.compareRule (sRule, aAttr);
         assertEquals(expResult, result);
 
 
-        instance.Animals.clear();
+        instance.clearAnimals (); //arrAnimals.clear();
         sRule = "^невысокое";
         instance.insertIntoCollection(aAttr);
         //instance.displayAll(instance.Animals);
         expResult = true;
-        result = instance.executeRule(sRule, aAttr);
+        result = instance.compareRule (sRule, aAttr);
         assertEquals(expResult, result);
 
-        result = instance.executeRule(sRule, instance.Animals.get(0));
+        //result = instance.executeRule(sRule, instance.getAnimal (0));
+        result = instance.getAnimal (0).isRuleMatch (sRule);
         assertEquals(expResult, result);
     }
 

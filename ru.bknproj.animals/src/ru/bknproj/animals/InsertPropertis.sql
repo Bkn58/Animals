@@ -1,0 +1,10 @@
+USE [Animals]
+Insert into Propertis (Proper_ID,Proper_Name,Atribut_ID) Values (	1	,'легкое',	1	)
+Insert into Propertis (Proper_ID,Proper_Name,Atribut_ID) Values (	2	,'среднее',	1	)
+Insert into Propertis (Proper_ID,Proper_Name,Atribut_ID) Values (	3	,'тяжелое',	1	)
+Insert into Propertis (Proper_ID,Proper_Name,Atribut_ID) Values (	4	,'маленькое',	2	)
+Insert into Propertis (Proper_ID,Proper_Name,Atribut_ID) Values (	5	,'невысокое',	2	)
+Insert into Propertis (Proper_ID,Proper_Name,Atribut_ID) Values (	6	,'высокое',	2	)
+Insert into Propertis (Proper_ID,Proper_Name,Atribut_ID) Values (	7	,'травоядное',	3	)
+Insert into Propertis (Proper_ID,Proper_Name,Atribut_ID) Values (	8	,'плотоядное',	3	)
+Insert into Propertis (Proper_ID,Proper_Name,Atribut_ID) Values (	9	,'всеядное',	3	)

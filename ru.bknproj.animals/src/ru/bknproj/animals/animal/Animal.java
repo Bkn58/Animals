@@ -1,29 +1,35 @@
-package ru.bknproj.animals.Animal;
+package ru.bknproj.animals.animal;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Базовый класс одного животного
+ * Базовый класс одного животного.
  *
  * @author Bkn
  */
 public class Animal {
-     ArrayList <String> propAni;   // динамический массив свойств одного животного
+    ArrayList <String> propAni;   // динамический массив свойств одного животного
     
-     public Animal(){
+    public Animal(){
         propAni = new ArrayList <> (); 
      }
+    private Logger log = LoggerFactory.getLogger(Animal.class);
+
     /**
-     * Поиск конкретного атрибута из лексемы в атрибутах конкретного животного
+     * Поиск конкретного атрибута из лексемы в атрибутах конкретного животного.
+     *
      * @param sAttrib - текущий атрибут текущего правила
      * @return  tue - если атрибут встречается в атрибутах животного,
      *          false - если атрибут не встречается ни в одном атрибуте
      */
     boolean isAttribMatch (String sAttrib){
         AtomicBoolean isExist= new AtomicBoolean(false);
-        // перебираем все атрибуты животного и сравниваем ее с текущей лексемой
+        // перебираем все атрибуты животного и сравниваем их с лексемой правила
         String[] aSubLexeme = sAttrib.split("\\|");  //если в лексеме есть дизъюнкция sub-лексем (символ "|")
         Arrays.stream(aSubLexeme).forEach(str -> {
             str = str.trim();
@@ -40,6 +46,7 @@ public class Animal {
                     if (str.equals(spropAni)) {
                         // содержит нужный атрибут, дальше не смотрим
                         isExist.set(true);
+
                         return;
                     }
                 }
@@ -48,7 +55,8 @@ public class Animal {
         return isExist.get();
     }
     /**
-     * Поиск лексемы в атрибутах конкретного животного
+     * Поиск лексемы в атрибутах конкретного животного.
+     *
      * @param sLexeme - текущая лексема текущего правила
      * @return  tue - если лексема встречается в атрибутах животного,
      *          false - если лексема не встречается ни в одном атрибуте
@@ -57,12 +65,15 @@ public class Animal {
         boolean ret=false;
         String sRule = sLexeme;
         String[] aAttr = sRule.split(",");                   // получаем из "подправила" массив лексем, необходимых для выборки животных
-        if (Arrays.stream(aAttr).allMatch(sAttr -> this.isAttribMatch(sAttr)))
+        if (Arrays.stream(aAttr).allMatch(sAttr -> this.isAttribMatch(sAttr))) {
+            log.debug (this.propAni.toString ());
             return true;
+        }
         return  ret;
     }
     /**
-     * записывает атрибуты животного из aAttr в динамический массив propAni
+     * Записывает атрибуты животного из aAttr в динамический массив propAni.
+     *
      * @param aAttr - массив с атрибутами животного
      */
 

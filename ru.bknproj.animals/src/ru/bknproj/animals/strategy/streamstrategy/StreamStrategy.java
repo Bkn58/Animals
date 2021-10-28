@@ -1,8 +1,9 @@
-package ru.bknproj.animals.Strategy.StreamStrategy;
+package ru.bknproj.animals.strategy.streamstrategy;
 
-
-import ru.bknproj.animals.Strategy.Animals;
-import ru.bknproj.animals.Strategy.ReadAnimals;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.bknproj.animals.strategy.BaseStrategy;
+import ru.bknproj.animals.strategy.CountingAnimals;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,35 +13,44 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 
 /**
- * @author Bkn
- * Реализует одну из стратегий подсчета количества животных - подсчет "на лету" из входного потока
+ * Реализация стратегии подсчета количества животных напрямую из входного потока
+ *
+ *  @author Bkn
  */
-public class StreamStrategy extends Animals implements ReadAnimals {
+public class StreamStrategy extends BaseStrategy implements CountingAnimals {
+    private static final String CP1251 = "Cp1251";
+    private static final String RULE = "\n\rRule: ";
+    private static final String COUNT = " count: ";
+    private static final String BLANK = " ";
+    private Logger log = LoggerFactory.getLogger(StreamStrategy.class);
+
     /**
      * Реализация интерфейса паттерна "Стратегия"
-     * Просматривает файл с животными и сразу "на лету" ведет подсчет на основании файла с правилами
-     * @param sFileAni - файл с животными
-     * @param sFileRules - файл с правилами
+     * ведет подсчет животных из входного потока на основании файла с правилами.
+     *
+     * @param fileNameAni - файл входного потока с животными
+     * @param fileNameRules - файл с правилами
      * @return String - выходная строка результата
+     * @throws IOException
      */
     @Override
-    public String ReadAnimals(String sFileAni, String sFileRules) {
+    public String countingAnimals (String fileNameAni, String fileNameRules) throws IOException {
         BufferedReader inputAnimals = null;
         BufferedReader inputRules = null;
-        String sOut = "";
+        StringBuilder  sOut = new StringBuilder ();
         try {
             String txtLineAni;
             String txtLineRule;
 
-            File fInRules = new File(sFileRules);
-            inputRules = Files.newBufferedReader(fInRules.toPath(), Charset.forName("Cp1251"));
+            File fInRules = new File(fileNameRules);
+            inputRules = Files.newBufferedReader(fInRules.toPath(), Charset.forName(CP1251));
             txtLineRule = inputRules.readLine();                            // читаем из потока Правила
 
-            File fInAnmals = new File(sFileAni);
-            inputAnimals = Files.newBufferedReader(fInAnmals.toPath(), Charset.forName("Cp1251"));
-            while(txtLineRule != null){
+            File fInAnmals = new File(fileNameAni);
+            inputAnimals = Files.newBufferedReader(fInAnmals.toPath(), Charset.forName(CP1251));
+            while(txtLineRule != null) {
                 if (checker.isRuleValid(txtLineRule)) {
-                    ArrayList ArrayRules = doNormalization (txtLineRule);
+                    ArrayList <String> ArrayRules = doNormalization (txtLineRule);
 
                     txtLineAni = inputAnimals.readLine();
                     int cnt = 0;
@@ -48,39 +58,45 @@ public class StreamStrategy extends Animals implements ReadAnimals {
                         boolean isExist = false;
                         for (int i=0;i<ArrayRules.size();i++) {                 // выбираем нормализованное "подправило" без скобок
                             String sRule = (String)ArrayRules.get(i);
-                            String[] sAttrRule = sRule.split(",");           // получаем массив атрибутов "подправила", необходимых для выборки животных;
+                            String[] sAttrRule = sRule.split(",");           // получаем массив лексем (подмножества атрибутов, разделенных запятыми), необходимых для выборки животных;
                             String[] sAttrAni = txtLineAni.split(",");       // получаем массив атрибутов животных
+
                             for (String strLexema : sAttrRule) {                // перебираем все лексемы "подправила"
-                                isExist = executeRule(strLexema, sAttrAni);
+                                isExist = compareRule (strLexema, sAttrAni);
                                 if (!isExist)
                                     break;                                      // лексема не встретилась в атрибутах животного - прерываем цикл просмотра лексем
                             }
                             if (isExist) {
                                 cnt++;                                          // все лексемы "подправила" совпали - наращиваем счетчик
+                                log.debug (txtLineAni);
                                 break;                                          // нет необходимости дальше смотреть "подправила"
                             }
                         }
                         txtLineAni = inputAnimals.readLine();                   // читаем из потока животных
                     }
-                    sOut = sOut + "\n\rRule: " + txtLineRule + " count: " + String.valueOf(cnt) + " ";
+                    sOut.append (RULE).append (txtLineRule).append (COUNT).append (cnt).append (BLANK);
+                    log.debug (txtLineRule+" COUNT: {}",cnt);
+                }
+                else {
+                    log.error ("Syntax ERROR of the rule:'{}' in the position: {} {}", txtLineRule, checker.getErrorPosition (), checker.getErrorMessage ());
                 }
                 txtLineRule = inputRules.readLine();                        // читаем из потока Правила
                 inputAnimals.close();
-                inputAnimals = Files.newBufferedReader(fInAnmals.toPath(), Charset.forName("Cp1251"));
+                inputAnimals = Files.newBufferedReader(fInAnmals.toPath(), Charset.forName(CP1251));
             }
         } catch (IOException ex) {
-            //Logger.getLogger(JavaAnimals.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("IOException ", ex);
             ex.printStackTrace();
         } finally {
             try {
                 inputAnimals.close();
                 inputRules.close();
             } catch (IOException ex) {
-                //Logger.getLogger(JavaAnimals.class.getName()).log(Level.SEVERE, null, ex);
+                log.error("IOException ", ex);
                 ex.printStackTrace();
             }
         }
-        return sOut;
+        return sOut.toString ();
     }
 
 }

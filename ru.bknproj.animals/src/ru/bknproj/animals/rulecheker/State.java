@@ -1,4 +1,4 @@
-package ru.bknproj.animals.RuleCheker;
+package ru.bknproj.animals.rulecheker;
 
 /**
  *

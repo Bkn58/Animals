@@ -1,17 +1,17 @@
 package ru.bknproj.animals;
 
 import org.junit.Test;
-import ru.bknproj.animals.Strategy.Animals;
+import ru.bknproj.animals.strategy.BaseStrategy;
 
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-public class AnimalsTest {
+public class BaseStrategyTest {
 
     @Test
     public void isRuleValid() {
-        Animals ex = new Animals();
+        BaseStrategy ex = new BaseStrategy ();
         boolean actual = ex.isRuleValid("");
         boolean expected = false;
         assertEquals(expected,actual);
@@ -39,7 +39,7 @@ public class AnimalsTest {
 
     @Test
     public void doNormalization() {
-        Animals ex = new Animals();
+        BaseStrategy ex = new BaseStrategy ();
         ArrayList result;
 
         ArrayList actual = ex.doNormalization("(высокое,тяжелое)(^легкое)");
@@ -71,18 +71,18 @@ public class AnimalsTest {
         boolean result;
         boolean expResult;
         String [] aAttr = {"курица", "травоядное", "маленькое", "легкое"};
-        Animals instance = new Animals();
+        BaseStrategy instance = new BaseStrategy ();
 
         String sRule = "маленькое";
         expResult = true;
 
-        result = instance.executeRule(sRule, aAttr);
+        result = instance.compareRule (sRule, aAttr);
         assertEquals(expResult, result);
 
         String sRule1 = "^маленькое";
         expResult = false;
 
-        result = instance.executeRule(sRule1, aAttr);
+        result = instance.compareRule (sRule1, aAttr);
         assertEquals(expResult, result);
 
     }
